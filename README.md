@@ -48,14 +48,14 @@ This app lets users either retrieve their current geographical location or searc
 
 ---
 
-## ✨ Features
+## Getting started
 
 Prerequisites
 Node.js (v14+) & npm or yarn installed on your machine.
 
 ---
 
-##📖 Usage
+## 📖 Usage
 
 Click “Get My Location” to fetch your current location (allow browser permission).
 
@@ -64,8 +64,7 @@ Or, type a place name in the search field and click Search.
 Once data loads, your coordinates, address, and an embedded map will appear.
 
 ---
-
-##🚧 Future Enhancements
+## 🚧 Future Enhancements
 
 Quick Wins
 📋 Copy to Clipboard – Buttons to copy coordinates or share links.
@@ -76,7 +75,7 @@ Quick Wins
 
 ---
 
-##Advanced Features
+## Advanced Features
 
 🗺️ Interactive Map – Integrate Leaflet.js or Mapbox with zoom & draggable markers.
 
@@ -89,8 +88,7 @@ Quick Wins
 🌐 Backend Proxy – Use Node.js/Express to handle API calls & caching.
 
 ---
-
-##🙌 Credits
+## 🙌 Credits
 
 Built using modern frontend tools: React, Geolocation API, and OpenStreetMap/Nominatim
 

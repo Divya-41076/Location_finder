@@ -29,25 +29,6 @@ This app lets users either retrieve their current geographical location or searc
 
 ---
 
-## 📂 Project Structure
-
-
-├── public/
-│   └── index.html             # Main HTML template
-├── src/
-│   ├── App.jsx or App.js      # Main React component
-│   ├── components/
-│   │   ├── LocationSearch.jsx
-│   │   └── LocationDetails.jsx
-│   ├── styles/
-│   │   └── App.css            # App-wide styling
-│   ├── index.js               # App entry point
-│   └── hooks/
-│       └── useGeolocation.js  # Hook for location logic
-└── package.json               # Project metadata & dependencies
-
----
-
 ## Getting started
 
 Prerequisites

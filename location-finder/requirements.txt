@@ -1,0 +1,61 @@
+Copy Coordinates Button
+
+Next to latitude/longitude, add a button: 📋 “Copy”.
+
+Use navigator.clipboard.writeText().
+
+Better Error Messages
+
+Replace generic messages with user-friendly ones.
+
+Example: If offline → “You’re offline. Please connect to the internet.”
+
+Dark/Light Mode Toggle
+
+Add a button that toggles between two CSS themes.
+
+Store preference in localStorage.
+
+UI Animations
+
+Add smooth fade-in/out transitions for error messages, results, and map sections.
+
+Responsive Fixes
+
+Adjust map height for mobile (height: 50vh).
+
+Stack buttons vertically on smaller screens.
+
+🚀 Advanced Features (For Learning + Impressing)
+
+These will make your app stand out:
+
+Interactive Map with Leaflet.js
+
+Instead of an iframe, integrate Leaflet.js.
+
+Features: draggable markers, zoom, popups, multiple results on map.
+
+Recent Searches
+
+Store last 5 searches in localStorage.
+
+Show them as clickable history below the search box.
+
+Multiple Search Results
+
+Instead of only first match, display a list (city, country, coordinates).
+
+Let the user click to view details/map.
+
+PWA (Progressive Web App)
+
+Make it installable on phones.
+
+Cache last location so the app still works offline.
+
+Backend Proxy (Node.js/Express)
+
+Helps avoid API rate limits.
+
+Lets you log searches or add extra APIs (like weather at that location 🌦️).

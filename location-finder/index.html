@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Finder</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-controls">
+                <button id="themeToggle" class="theme-toggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <h1><i class="fas fa-map-marker-alt"></i> Location Finder</h1>
+            <p>Find your current location or search for any place worldwide</p>
+        </header>
+
+        <main class="main-content">
+            <div class="controls-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-compass"></i> Location Controls</h2>
+                    </div>
+                    <div class="card-content">
+                        <button id="getCurrentLocationBtn" class="btn btn-primary">
+                            <i class="fas fa-crosshairs"></i>
+                            <span>Get My Location</span>
+                        </button>
+
+                        <div class="search-container">
+                            <div class="search-input-wrapper">
+                                <i class="fas fa-search search-icon"></i>
+                                <input 
+                                    type="text" 
+                                    id="searchInput" 
+                                    placeholder="Search for a location..."
+                                    class="search-input"
+                                    autocomplete="off"
+                                >
+                                <div id="searchSuggestions" class="search-suggestions hidden"></div>
+                            </div>
+                            <div class="button-group">
+                                <button id="searchBtn" class="btn btn-secondary">
+                                    <i class="fas fa-search"></i>
+                                    <span>Search</span>
+                                </button>
+                                <button id="clearHistoryBtn" class="btn btn-outline-small" title="Clear History">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="recentSearches" class="recent-searches hidden">
+                            <h4><i class="fas fa-history"></i> Recent Searches</h4>
+                            <div id="recentSearchesList" class="recent-searches-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-info-circle"></i> Location Details</h2>
+                    </div>
+                    <div class="card-content">
+                        <div id="errorMessage" class="error-message hidden"></div>
+                        <div id="loadingMessage" class="loading-message hidden">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Getting location...</span>
+                        </div>
+                        
+                        <div id="searchResults" class="search-results hidden">
+                            <h4>Search Results</h4>
+                            <div id="searchResultsList" class="search-results-list"></div>
+                        </div>
+
+                        <div id="locationDetails" class="location-details hidden">
+                            <div class="coordinates-grid">
+                                <div class="coordinate-item">
+                                    <label>Latitude</label>
+                                    <div class="coordinate-with-copy">
+                                        <span id="latitude" class="coordinate-value">-</span>
+                                        <button id="copyLatBtn" class="copy-btn" title="Copy Latitude">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="coordinate-item">
+                                    <label>Longitude</label>
+                                    <div class="coordinate-with-copy">
+                                        <span id="longitude" class="coordinate-value">-</span>
+                                        <button id="copyLonBtn" class="copy-btn" title="Copy Longitude">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="copy-all-container">
+                                <button id="copyAllBtn" class="btn btn-outline-small">
+                                    <i class="fas fa-copy"></i>
+                                    Copy All Coordinates
+                                </button>
+                            </div>
+
+                            <div id="accuracyInfo" class="info-item hidden">
+                                <label>Accuracy</label>
+                                <span id="accuracy">-</span>
+                            </div>
+
+                            <div id="addressInfo" class="info-item hidden">
+                                <label>Address</label>
+                                <span id="address">-</span>
+                            </div>
+
+                            <div id="cityInfo" class="info-item hidden">
+                                <label>City</label>
+                                <span id="city">-</span>
+                            </div>
+
+                            <div id="countryInfo" class="info-item hidden">
+                                <label>Country</label>
+                                <span id="country">-</span>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button id="viewOnMapBtn" class="btn btn-outline">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    View on External Map
+                                </button>
+                                <button id="shareLocationBtn" class="btn btn-outline">
+                                    <i class="fas fa-share"></i>
+                                    Share Location
+                                </button>
+                                <button id="viewHistoryBtn" class="btn btn-outline">
+                                    <i class="fas fa-history"></i>
+                                    View History
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="noLocationMessage" class="no-location-message">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <p>No location data available</p>
+                            <small>Click "Get My Location" or search for a place</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="mapSection" class="map-section hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-map"></i> Interactive Map</h2>
+                        <div class="map-controls">
+                            <button id="centerMapBtn" class="btn-small" title="Center on Location">
+                                <i class="fas fa-crosshairs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div id="mapContainer" class="map-container">
+                            <div id="leafletMap" class="leaflet-map"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="historySection" class="history-section hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-history"></i> Location History</h2>
+                        <div class="history-controls">
+                            <button id="exportHistoryBtn" class="btn-small" title="Export History">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button id="clearHistoryBtn" class="btn-small" title="Clear History">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button id="toggleHistoryBtn" class="btn-small" title="Toggle History">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="history-stats">
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalLocations">0</span>
+                                <span class="stat-label">Locations</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalDistance">0 km</span>
+                                <span class="stat-label">Total Distance</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="averageAccuracy">0m</span>
+                                <span class="stat-label">Avg Accuracy</span>
+                            </div>
+                        </div>
+                        
+                        <div class="history-filters">
+                            <select id="historyFilter" class="filter-select">
+                                <option value="all">All Time</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                            </select>
+                            <button id="showHistoryMapBtn" class="btn btn-outline-small">
+                                <i class="fas fa-map"></i>
+                                View on Map
+                            </button>
+                        </div>
+
+                        <div id="historyTimeline" class="history-timeline">
+                            <div id="noHistoryMessage" class="no-history-message">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <p>No location history yet</p>
+                                <small>Start using the app to build your location timeline</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-section">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-crosshairs feature-icon"></i>
+                        <h3>GPS Location</h3>
+                        <p>Get your precise current location using GPS</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-search feature-icon"></i>
+                        <h3>Location Search</h3>
+                        <p>Search for any location worldwide</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-map feature-icon"></i>
+                        <h3>Interactive Map</h3>
+                        <p>Explore locations on an interactive map</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-history feature-icon"></i>
+                        <h3>Search History</h3>
+                        <p>Quick access to recent searches</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-copy feature-icon"></i>
+                        <h3>Copy Coordinates</h3>
+                        <p>Easily copy location coordinates</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-moon feature-icon"></i>
+                        <h3>Dark Mode</h3>
+                        <p>Toggle between light and dark themes</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

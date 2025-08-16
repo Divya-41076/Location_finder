@@ -47,8 +47,8 @@ This app lets users either retrieve their current geographical location or searc
 └── package.json               # Project metadata & dependencies
 
 ---
-**
-##🚀 Getting Started**
+
+## ✨ Features
 
 Prerequisites
 Node.js (v14+) & npm or yarn installed on your machine.
